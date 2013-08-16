@@ -31,7 +31,7 @@ exports.routes = function(mwc){
             if(err) throw err;
             if(request.is('json')){
               if(objCreated){
-                response.status(201);
+                response.status(202);
                 response.json(objCreated);
               } else {
                 response.send(400);
