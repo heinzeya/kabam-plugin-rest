@@ -21,7 +21,7 @@ exports.routes = function(mwc){
     }
   });
 
-  mwc.app.post(/^\/api\/rest\/([a-zA-Z0-9_]+)$/, function(request,response){
+  mwc.app.post(/^\/api\/rest\/([a-zA-Z0-9_]+)\/?$/, function(request,response){
     response.send('Create item in collection of '+request.params[0]);
   });
 
