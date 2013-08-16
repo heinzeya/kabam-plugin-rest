@@ -2,7 +2,23 @@ exports.name='mwc_plugin_rest';
 
 exports.routes = function(mwc){
   mwc.app.get(/^\/api\/rest\/([a-zA-Z0-9_]+)$/, function(request,response){
-    response.send('Show all items of collection of '+request.params[0]);
+    var modelName = request.params[0];
+
+    if(request.model[modelName]){
+      if(request.user){
+        request.model[modelName].getForUser(request.user,{},function(err,documents){
+          if(err){
+            throw err;
+          } else {
+            response.json(documents);
+          }
+        });
+      } else {
+        response.send(400);
+      }
+    } else {
+      response.send(404);
+    }
   });
 
   mwc.app.post(/^\/api\/rest\/([a-zA-Z0-9_]+)$/, function(request,response){

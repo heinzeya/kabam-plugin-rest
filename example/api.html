@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" ng-app>
+<head>
+    <meta charset="utf-8">
+    <title>Cats api</title>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+</head>
+<body>
+<h1>Cats</h1>
+<p>Search: <input ng-model="query"></p>
+<table ng-controller='catsList' border="1">
+<tr ng-repeat='cat in cats | filter:query | orderBy:"nickname"'>
+    <td>{{cat.nickname}}</td>
+    <td></td>
+    <td></td>
+</tr>
+</table>
+<script type="text/javascript">
+    function catsList($scope,$http){
+        $scope.hidden=true;
+        $http.get('/api/rest/Cats')
+                .success(function(data) {
+                    $scope.cats=data;
+                })
+                .error(function(err){
+                    console.log(err);
+                });
+    }
+</script>
+</body>
+</html>
