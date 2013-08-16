@@ -1,8 +1,7 @@
 {
-  "name": "mwc_plugin_spine",
+  "name": "mwc_plugin_rest",
   "version": "0.0.1",
   "description": "Rest interface for mongoose models of mwcKernel",
-  "main": "index.js",
   "main": "index.js",
   "directories": {
     "example": "example"
@@ -22,10 +21,8 @@
     "rest",
     "api"
   ],
-  "dependencies": { },
-  "devDependencies": {
-    "mwc_kernel": "git+https://github.com/mywebclass/mwc_kernel.git"
-  },
+  "dependencies": {},
+  "devDependencies": {},
   "author": "Anatolij Ostroumov",
   "license": "MIT",
   "bugs": {
