@@ -3,7 +3,8 @@ var mwcKernel = require('mwc_kernel');
 var MWC = mwcKernel({
   'hostUrl': 'http://vvv.msk0.ru/',
   'mongoUrl': 'mongodb://localhost/mwc_dev',
-  'secret': 'LalalaDai3Ryblya'
+  'secret': 'LalalaDai3Ryblya',
+  'disableCsrf':true
 });
 
 MWC.extendModel('Cats', function (mongoose, config) {
