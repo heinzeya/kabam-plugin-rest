@@ -26,7 +26,15 @@
     "api"
   ],
   "dependencies": {},
-  "devDependencies": {},
+  "devDependencies": {
+    "grunt": "*",
+    "grunt-contrib-watch": "*",
+    "grunt-contrib-jshint": "*",
+    "grunt-ngdoc": "*",
+    "grunt-contrib-copy": "*",
+    "grunt-ngdocs": "*",
+    "grunt-contrib-clean": "*"
+  },
   "author": "Anatolij Ostroumov",
   "license": "MIT",
   "bugs": {
