@@ -1,4 +1,4 @@
-exports.name = 'mwc_plugin_rest';
+exports.name = 'kabamPluginRest';
 
 exports.routes = function (mwc) {
   mwc.app.get(/^\/api\/rest\/([a-zA-Z0-9_]+)$/, function (request, response) {
@@ -158,5 +158,4 @@ exports.routes = function (mwc) {
       response.send(404);
     }
   });
-
 };
