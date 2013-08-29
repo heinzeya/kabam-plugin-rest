@@ -6,7 +6,7 @@ exports.routes = function (mwc) {
 
     if (request.model[modelName]) {
       if (request.user) {
-        request.model[modelName].getForUser(request.user, {}, function (err, documents) {
+        request.model[modelName].getForUser(request.user, request.query, function (err, documents) {
           if (err) {
             throw err;
           } else {
