@@ -1,4 +1,4 @@
-var mwcKernel = require('mwc_kernel');
+var mwcKernel = require('kabam-kernel');
 
 var MWC = mwcKernel({
   'hostUrl': 'http://vvv.msk0.ru/',
@@ -7,18 +7,18 @@ var MWC = mwcKernel({
   'disableCsrf':true
 });
 
-MWC.extendModel('Cats', function (mongoose, config) {
-  var CatsSchema = new mongoose.Schema({
+MWC.extendModel('Cats', function (kabam) {
+  var CatSchema = new kabam.mongoose.Schema({
     'nickname': String,
-    'owner': mongoose.Schema.Types.ObjectId
+    'owner': kabam.mongoose.Schema.Types.ObjectId
   });
 
-  CatsSchema.index({
+  CatSchema.index({
     nickname: 1,
     owner: 1
   });
 
-  CatsSchema.statics.getForUser = function (user, parameters, callback) {
+  CatSchema.statics.getForUser = function (user, parameters, callback) {
     if (user && user._id) {
       //var query = this.find({'owner': user._id});
       var query = this.find();
@@ -29,16 +29,16 @@ MWC.extendModel('Cats', function (mongoose, config) {
       callback(null);
     }
   };
-  CatsSchema.statics.canCreate = function (user) {
+  CatSchema.statics.canCreate = function (user) {
     return (user) ? true : false;
   };
-  CatsSchema.methods.canRead = function (user) {
+  CatSchema.methods.canRead = function (user) {
     return (user._id === this.owner);
   };
-  CatsSchema.methods.canWrite = function (user) {
+  CatSchema.methods.canWrite = function (user) {
     return (user._id === this.owner);
   };
-  return mongoose.model('cats', CatsSchema);
+  return kabam.mongoConnection.model('cat', CatSchema);
 });
 
 MWC.usePlugin(require('./../index.js'));
