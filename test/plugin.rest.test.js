@@ -30,8 +30,8 @@ describe('kabam-plugin-rest test', function () {
 
             CatSchema.statics.getForUser = function (user, parameters, callback) {
                 if (user && user._id) {
-                    //var query = this.find({'owner': user._id});
-                    var query = this.find();
+                    var query = this.find({'owner': user._id});
+                    //var query = this.find();
                     //todo - parameters
 
                     query.exec(callback);
@@ -56,7 +56,7 @@ describe('kabam-plugin-rest test', function () {
     });
     describe('Testing create cat for this user', function () {
         var response,
-        cat,
+        body,
         user;
         before(function (done) {
             MWC.model.User.create({

@@ -20,8 +20,8 @@ MWC.extendModel('Cats', function (kabam) {
 
   CatSchema.statics.getForUser = function (user, parameters, callback) {
     if (user && user._id) {
-      //var query = this.find({'owner': user._id});
-      var query = this.find();
+      var query = this.find({'owner': user._id});
+      //var query = this.find();
       //todo - parameters
 
       query.exec(callback);
