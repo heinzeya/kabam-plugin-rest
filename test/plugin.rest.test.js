@@ -1,7 +1,7 @@
 var should = require('should'),
   KabamKernel = require('kabam-kernel'),
   request = require('request'),
-  port = 3019;
+  port = 3020;
 
 describe('kabam-plugin-rest test', function () {
     var MWC;
@@ -68,7 +68,7 @@ describe('kabam-plugin-rest test', function () {
                 }
                 user = userCreated;
                 request({
-                    'url': 'http://localhost:3019/api/rest/Cats?mwckey=' + userCreated.apiKey,
+                    'url': 'http://localhost:'+port+'/api/rest/Cats?mwckey=' + userCreated.apiKey,
                     'method': 'POST',
                     'json': {
                         "nickname": "kitty"
