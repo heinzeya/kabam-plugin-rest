@@ -92,7 +92,35 @@ describe('kabam-plugin-rest test', function () {
         it('check proper response for it', function() {
             response.statusCode.should.be.equal(202);
         });
-        after(function (done) {
+
+        describe('We can get users collection of cats with this cat in it',function(){
+          it('have to be done');
+          it('cat have proper nickname');
+          it('cat have proper _id');
+
+        });
+
+      describe('We can get this cat by id ',function(){
+        it('have to be done');
+        it('cat have proper nickname');
+        it('cat have proper _id');
+      });
+
+      describe('We can rename cat by PUT request',function(){
+        it('have to be done');
+        it('have proper response');
+        it('cat have proper nickname');
+        it('cat have proper _id');
+      });
+
+      describe('We can delete cat\'s record by DELETE request',function(){
+        it('have to be done');
+        it('have proper response');
+        it('there is no cat record in /api/rest/cats');
+      });
+
+
+      after(function (done) {
             user.remove(done);
             MWC.model.Cats.remove({ nickname: 'kitty' }, function (err) {
                 if (err) {
