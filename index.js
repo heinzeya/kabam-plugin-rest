@@ -26,7 +26,9 @@ exports.routes = function (mwc) {
     if (request.model[modelName]) {
       if (request.user) {
         if (request.model[modelName].canCreate(request.user)) {
-          request.model[modelName].create(request.body, function (err, objCreated) {
+          var obj = request.body;
+          obj.owner_id = request.user._id;
+          request.model[modelName].create(obj, function (err, objCreated) {
             if (err) {
               throw err;
             }
