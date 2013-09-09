@@ -30,7 +30,7 @@ describe('kabam-plugin-rest test', function () {
 
             CatSchema.statics.getForUser = function (user, parameters, callback) {
                 if (user && user._id) {
-                    var query = this.find({'owner': user._id});
+                    var query = this.find({ 'owner': user._id });
                     //var query = this.find();
                     //todo - parameters
 
@@ -43,10 +43,10 @@ describe('kabam-plugin-rest test', function () {
                 return (user) ? true : false;
             };
             CatSchema.methods.canRead = function (user) {
-                return (user._id === this.owner);
+                return (user._id.equals(this.owner));
             };
             CatSchema.methods.canWrite = function (user) {
-                return (user._id === this.owner);
+                return (user._id.equals(this.owner));
             };
             return kabam.mongoConnection.model('cat', CatSchema);
         });
@@ -57,6 +57,7 @@ describe('kabam-plugin-rest test', function () {
     describe('Testing create cat for this user', function () {
         var response,
         body,
+        cat_id,
         user;
         before(function (done) {
             MWC.model.User.create({
@@ -68,10 +69,93 @@ describe('kabam-plugin-rest test', function () {
                 }
                 user = userCreated;
                 request({
-                    'url': 'http://localhost:'+port+'/api/rest/Cats?mwckey=' + userCreated.apiKey,
+                    'url': 'http://localhost:' + port + '/api/rest/Cats?mwckey=' + userCreated.apiKey,
                     'method': 'POST',
                     'json': {
-                        "nickname": "kitty"
+                        "nickname": "kitty",
+                        "owner": userCreated._id
+                    }
+                },
+                  function (err, r, b) {
+                      if (err) {
+                          throw err;
+                      }
+                      body = b;
+                      response = r;
+                      cat_id = b._id;
+                      done();
+                  });
+
+            });
+        });
+
+        it('check cat nickname', function () {
+            body.nickname.should.be.equal('kitty');
+        });
+        it('check proper response for it', function () {
+            response.statusCode.should.be.equal(202);
+        });
+
+        describe('We can get users collection of cats with this cat in it', function () {
+            var body,
+                response;
+            before(function (done) {
+                request({
+                    'url': 'http://localhost:' + port + '/api/rest/Cats?mwckey=' + user.apiKey,
+                    'method': 'GET'
+                },
+                  function (err, r, b) {
+                      if (err) {
+                          throw err;
+                      }
+                      body = JSON.parse(b);
+                      response = r;
+                      done();
+                  });
+            });
+            it('cat have nickname', function () {
+                body[0].nickname.should.be.equal('kitty');
+            });
+            it('cat have proper owner _id', function () {
+                body[0].owner.should.be.equal(user._id.toString());
+            });
+
+        });
+
+        describe('We can get this cat by id ', function () {
+            var body,
+                response;
+            before(function (done) {
+                request({
+                    'url': 'http://localhost:' + port + '/api/rest/Cats/' + cat_id + '?mwckey=' + user.apiKey,
+                    'method': 'GET'
+                },
+                  function (err, r, b) {
+                      if (err) {
+                          throw err;
+                      }
+                      body = JSON.parse(b);
+                      response = r;
+                      done();
+                  });
+            });
+            it('cat have nickname', function () {
+                body.nickname.should.be.equal('kitty');
+            });
+            it('cat have proper owner _id', function () {
+                body.owner.should.be.equal(user._id.toString());
+            });
+        });
+
+        describe('We can rename cat by PUT request', function () {
+            var body,
+                response;
+            before(function (done) {
+                request({
+                    'url': 'http://localhost:' + port + '/api/rest/Cats/' + cat_id + '?mwckey=' + user.apiKey,
+                    'method': 'PUT',
+                    'json': {
+                        "nickname": "jjj"
                     }
                 },
                   function (err, r, b) {
@@ -82,51 +166,58 @@ describe('kabam-plugin-rest test', function () {
                       response = r;
                       done();
                   });
-
+            });
+            it('have proper response for it', function () {
+                response.statusCode.should.be.equal(202);
+            });
+            it('cat have proper nickname', function () {
+                body.nickname.should.be.equal('jjj');
+            });
+            it('cat have proper owner _id', function () {
+                body.owner.should.be.equal(user._id.toString());
             });
         });
 
-        it('check cat nickname', function () {
-            body.nickname.should.be.equal('kitty');
-        });
-        it('check proper response for it', function() {
-            response.statusCode.should.be.equal(202);
-        });
+        describe('We can delete cat\'s record by DELETE request', function () {
+            var body,
+                response,
+                isfound = true;
+            before(function (done) {
+                request({
+                    'url': 'http://localhost:' + port + '/api/rest/Cats/' + cat_id + '?mwckey=' + user.apiKey,
+                    'method': 'DELETE',
+                    'json': {
+                        "nickname": "jjj"
+                    }
+                },
+                  function (err, r, b) {
+                      if (err) {
+                          throw err;
+                      }
+                      body = b;
+                      response = r; console.log(b);
+                      
 
-        describe('We can get users collection of cats with this cat in it',function(){
-          it('have to be done');
-          it('cat have proper nickname');
-          it('cat have proper _id');
-
-        });
-
-      describe('We can get this cat by id ',function(){
-        it('have to be done');
-        it('cat have proper nickname');
-        it('cat have proper _id');
-      });
-
-      describe('We can rename cat by PUT request',function(){
-        it('have to be done');
-        it('have proper response');
-        it('cat have proper nickname');
-        it('cat have proper _id');
-      });
-
-      describe('We can delete cat\'s record by DELETE request',function(){
-        it('have to be done');
-        it('have proper response');
-        it('there is no cat record in /api/rest/cats');
-      });
-
-
-      after(function (done) {
-            user.remove(done);
-            MWC.model.Cats.remove({ nickname: 'kitty' }, function (err) {
-                if (err) {
-                    throw err;
-                }
+                      MWC.model.Cats.findOne({ _id: cat_id }, function (err, objFound) {
+                          if (err) {
+                              throw err;
+                          }
+                          if (!objFound) isfound=false;
+                          done();
+                      });
+                  });
             });
+            it('have proper response for it', function () {
+                response.statusCode.should.be.equal(200);
+            });
+            it('there is no cat record in /api/rest/cats', function () {
+                isfound.should.be.false;
+            });
+        });
+
+
+        after(function (done) {
+            user.remove(done);            
         });
     });
 

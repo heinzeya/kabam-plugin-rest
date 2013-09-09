@@ -100,7 +100,7 @@ exports.routes = function (mwc) {
           if (objFound) {
             if (objFound.canWrite(request.user)) {
               for (var x in request.body) {
-                if (objFound.hasOwnProperty(x)) {
+                if ((objFound.toObject()).hasOwnProperty(x)) {
                   objFound[x] = request.body[x];
                 }
               }
